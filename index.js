@@ -1,24 +1,25 @@
-import { saveTask, getTasks } from "./firebase.js";
-
+import { saveTask, getTasks, onGetTasks } from "./firebase.js";
 const taskForm = document.getElementById('task-form');
 const taskContainer = document.getElementById('tasks-container');
 
 window.addEventListener('DOMContentLoaded', async () => {
 
   // querySnapshot son los datos que existen en este momento
-  const querySnapShot = await getTasks();
 
-  let html = '';
-  querySnapShot.forEach(doc => {
-    const task = doc.data();
-    html += `
-      <div>
-          <h3>${task.title}</h3>
-          <p>${task.description}</p>
-      </div>`;
-  });
+  onGetTasks((querySnapShot) => {
+    let html = '';
+    querySnapShot.forEach(doc => {
+      const task = doc.data();
+      html += `
+        <div>
+            <h3>${task.title}</h3>
+            <p>${task.description}</p>
+        </div>`;
+    });
 
-  taskContainer.innerHTML = html;
+    taskContainer.innerHTML = html;
+  })
+
 });
 
 
