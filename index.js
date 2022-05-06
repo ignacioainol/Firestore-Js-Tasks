@@ -1,8 +1,9 @@
-import { saveTask, getTasks, onGetTasks, deleteTask, getTask } from "./firebase.js";
+import { saveTask, getTasks, onGetTasks, deleteTask, getTask, updateTask } from "./firebase.js";
 const taskForm = document.getElementById('task-form');
 const tasksContainer = document.getElementById('tasks-container');
 
 let editStatus = false;
+let id = '';
 
 window.addEventListener('DOMContentLoaded', async () => {
 
@@ -37,7 +38,8 @@ window.addEventListener('DOMContentLoaded', async () => {
         const task = doc.data();
         taskForm['task-title'].value = task.title;
         taskForm['task-description'].value = task.description;
-
+        taskForm['task-save'].innerText = 'Update!';
+        id = dataset.id;
         editStatus = true;
       })
     })
@@ -53,10 +55,15 @@ taskForm.addEventListener('submit', (e) => {
   const title = taskForm['task-title'];
   const description = taskForm['task-description'];
 
-  if (editStatus) {
-    console.log("updating")
-  } else {
+  if (!editStatus) {
     saveTask(title.value, description.value);
+  } else {
+    updateTask(id, {
+      title: title.value,
+      description: description.value
+    });
+    id = '';
+    taskForm['task-save'].innerText = 'Save';
   }
 
   taskForm.reset();
