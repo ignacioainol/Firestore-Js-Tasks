@@ -10,19 +10,19 @@ window.addEventListener('DOMContentLoaded', async () => {
   // querySnapshot son los datos que existen en este momento
 
   onGetTasks((querySnapShot) => {
-    let html = '';
+    tasksContainer.innerHTML = '';
     querySnapShot.forEach(doc => {
       const task = doc.data();
-      html += `
-        <div>
-            <h3>${task.title}</h3>
+      tasksContainer.innerHTML += `
+        <div class="card card-body mt-2 border-primary">
+            <h3 class="h5">${task.title}</h3>
             <p>${task.description}</p>
-            <button class='btn-edit' data-id=${doc.id}>Edit</button>  
-            <button class='btn-delete' data-id=${doc.id}>Delete</button>  
+            <div>
+              <button class='btn btn-primary btn-edit' data-id=${doc.id}>Edit</button>  
+              <button class='btn btn-secondary btn-delete' data-id=${doc.id}>Delete</button>  
+            </div>
         </div>`;
     });
-
-    tasksContainer.innerHTML = html;
 
     const btnsDelete = tasksContainer.querySelectorAll('.btn-delete');
     btnsDelete.forEach(btn => {
